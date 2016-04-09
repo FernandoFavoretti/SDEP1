@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Scanner;
 
-
+import Parts.AmountSubComponents;
 import Parts.Part;
 import Parts.PartRepository;
 import Server.Servidor;
@@ -21,6 +21,7 @@ class Cliente {
 	public static Scanner scan = new Scanner (System.in);
 	public static ArrayList<String> serversNames = new ArrayList<String>();
 	public static ArrayList<PartRepository> serversPR = new ArrayList<PartRepository>();
+	public static PartRepository currentPR = null;
 	
 	public static void main(String[] args) throws MalformedURLException, RemoteException, NotBoundException {
 		String ynClient = "";
@@ -126,7 +127,7 @@ class Cliente {
 		
 		int indexPart = 0;
 		Part currentP = null;
-		PartRepository currentPR = selectServerPR();
+		currentPR = selectServerPR();
 		msgCurrentClient(currentPR.getNamePR().toUpperCase(),currentPR.getConnection());
 		
 		String command = "";
@@ -200,12 +201,32 @@ class Cliente {
 				auxshowp = scan.next();
 				Part auxshowp2 = null;
 				boolean print = false;
+				int num = 0;
 				
 				Iterator <Part> iterator2 = partR.getPartsList().iterator();
 				while(iterator2.hasNext()){
 					auxshowp2 = iterator2.next();
 					if(auxshowp.toUpperCase().equals(auxshowp2.getName().toUpperCase())){
-						System.out.printf("//// > - " + auxshowp2.getDescribe().toUpperCase());
+						System.out.println("//// > - " + auxshowp2.getDescribe().toUpperCase());
+						Iterator<AmountSubComponents> subiterator = auxshowp2.getComponents().iterator();
+						AmountSubComponents auxsubiterator = null;
+						if(subiterator.hasNext())
+							System.out.println("//// > - Contem as seguintes subParts: ");
+							
+						else
+							System.out.println("//// > - Nao contem nenhuma subPart ");
+
+							while(subiterator.hasNext()){
+								auxsubiterator = subiterator.next();
+								System.out.println("//// > - " + auxsubiterator.getSubComponent().getName() + " "+ auxsubiterator.getAmount()+" "+auxsubiterator.getServer());
+
+							}
+
+						if(auxshowp2.getIsPrimitive())
+							System.out.printf("//// > - Esta chave é primitiva. ");
+						else
+							System.out.printf("//// > - Esta chave não é primitiva. ");
+
 						print = true;
 						break;
 					}
@@ -223,6 +244,58 @@ class Cliente {
 				break;
 			
 			case "addsubpart" : 
+				boolean print2 = false;
+				boolean print3 = false;
+				int partnum = 0;
+				String auxpart;
+				System.out.print("//// >Insira o nome da Parte que sera inserida uma subPart: ");
+				auxpart = scan.next();
+				Part auxpart2 = null;
+				
+				Iterator <Part> iterator3 = partR.getPartsList().iterator();
+				while(iterator3.hasNext()){
+					auxpart2 = iterator3.next();
+					if(auxpart.toUpperCase().equals(auxpart2.getName().toUpperCase())){
+						System.out.printf("//// > - a Parte: " + auxpart2.getName().toUpperCase() + " ");
+						if(!auxpart2.getIsPrimitive()){
+							System.out.println("nao é primitiva. ");
+							print2 = true;
+						}
+						else
+						break;
+					}else
+						
+				
+					partnum++;
+				}
+				if(!print2){
+					System.out.printf("//// > - a Parte: " + auxpart + " nao existe ou e invalida \n");
+					break;
+				}
+				String auxsubpart;
+				System.out.print("//// >Insira o nome da subParte que sera inserida: ");
+				auxsubpart = scan.next();
+				System.out.print("//// >Insira a quantidade: ");
+				int auxsubqnt;
+				auxsubqnt = Integer.parseInt(scan.next());
+				Part auxsubpart2 = null;
+				
+				for(int servers = 0; servers < serversPR.size() ; servers++){
+					PartRepository auxrepo = serversPR.get(servers);
+					Iterator <Part> iterator4 = auxrepo.getPartsList().iterator();
+					while(iterator4.hasNext()){
+						auxsubpart2 = iterator4.next();
+						if(auxsubpart.toUpperCase().equals(auxsubpart2.getName().toUpperCase())){
+							currentPR.getPartsList().get(partnum).addSubComponents(auxsubpart2, auxsubqnt, serversNames.get(servers));
+							System.out.printf("//// > - a Parte: " + auxsubpart2.getName() + " foi adicionada com sucesso! ");
+							print3 = true;
+						}
+					}
+				}
+				if(!print3){
+					System.out.printf("//// > - A subPart nao existe ou e invalida. ");
+
+				}
 				/*
 				 *	IMPLEMENTAR 
 				 */

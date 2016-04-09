@@ -56,6 +56,13 @@ public class Servidor extends UnicastRemoteObject implements Part , PartReposito
 	public ArrayList<AmountSubComponents> getComponents() throws RemoteException { 
 		return this.componentsPart; 
 	}
+	@Override
+	public boolean addSubComponents(Part part, int ammount, String server) throws RemoteException{
+		AmountSubComponents subComponent = new AmountSubComponents(part,ammount,server);
+		this.componentsPart.add(subComponent);
+		
+		return true;
+	}
 	
 	@Override
 	public boolean getIsPrimitive() throws RemoteException { 
@@ -151,7 +158,7 @@ public class Servidor extends UnicastRemoteObject implements Part , PartReposito
 	public ArrayList<Part> getPartsList() throws RemoteException {
 		return this.partsList;
 	}
-	
+		
 	@Override
 	public void setConnection(String conn) throws RemoteException {
 		this.connection = conn;
