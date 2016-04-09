@@ -195,16 +195,31 @@ class Cliente {
 				break;
 			
 			case "showp" : 
-				/*
-				 *	IMPLEMENTAR 
-				 */
+				String auxshowp;
+				System.out.print("//// >Insira o nome da Parte a ser descrita: ");
+				auxshowp = scan.next();
+				Part auxshowp2 = null;
+				boolean print = false;
 				
+				Iterator <Part> iterator2 = partR.getPartsList().iterator();
+				while(iterator2.hasNext()){
+					auxshowp2 = iterator2.next();
+					if(auxshowp.toUpperCase().equals(auxshowp2.getName().toUpperCase())){
+						System.out.printf("//// > - " + auxshowp2.getDescribe().toUpperCase());
+						print = true;
+						break;
+					}
+				}
+				if(!print)
+					System.out.printf("//// > O nome colocado é invalido ou a Parte é inexistente. ");
+
 				break;
 			case "clearlist" : 
-				/*
-				 *	IMPLEMENTAR 
-				 */
-				
+				if(partR.clearParts())
+					System.out.println("//// > A lista foi limpa com sucesso. ");
+				else
+					System.out.println("//// > Não foi possivel limpar a lista. ");
+
 				break;
 			
 			case "addsubpart" : 

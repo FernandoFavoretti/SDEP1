@@ -130,6 +130,12 @@ public class Servidor extends UnicastRemoteObject implements Part , PartReposito
 		}
 		System.out.println("-------------------------------------");
 	}
+	
+	public boolean clearParts() throws RemoteException{
+		partsList.clear();
+		return true;
+	}
+
 
 	@Override
 	public String getConnection() throws RemoteException {

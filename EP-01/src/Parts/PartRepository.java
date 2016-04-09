@@ -9,6 +9,7 @@ public interface PartRepository extends Remote{
 	public void addPart(Part part) throws RemoteException;
 	public Part selectPart(int cod) throws RemoteException;
 	public void showAllParts() throws RemoteException;	
+	public boolean clearParts() throws RemoteException;
 	
 	public String getConnection() throws RemoteException;
 	public String getNamePR() throws RemoteException;
