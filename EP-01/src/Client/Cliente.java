@@ -22,6 +22,7 @@ class Cliente {
 	public static ArrayList<String> serversNames = new ArrayList<String>();
 	public static ArrayList<PartRepository> serversPR = new ArrayList<PartRepository>();
 	public static PartRepository currentPR = null;
+	public static Part currentP = null;
 	
 	public static void main(String[] args) throws MalformedURLException, RemoteException, NotBoundException {
 		String ynClient = "";
@@ -94,19 +95,7 @@ class Cliente {
 			partRep.setConnection(getNameWithBarsSplit(auxS, 3) + "/" +getNameWithBarsSplit(auxS, 4));
 			serversPR.add(partRep);
 		}
-		
-		/*
-		Iterator <String> iterator = serversNames.iterator();
-		String auxS = null;
-		while (iterator.hasNext()) {
-			auxS = iterator.next();
-			Part part = (Part) Naming.lookup("localhost/" + auxS);
-			PartRepository partRep = (PartRepository) Naming.lookup("localhost/" + auxS);
-			partRep.setConnection("localhost/" + auxS);
-			partRep.setNamePR(auxS);
-			serversPR.add(partRep);
-		}
-		*/
+
 	}
 	
 	public static String selectServerName(int index) throws MalformedURLException, RemoteException, NotBoundException {
@@ -143,7 +132,6 @@ class Cliente {
 		msgSucessConnection();
 		
 		int indexPart = 0;
-		Part currentP = null;
 		currentPR = selectServerPR();
 		msgCurrentClient(currentPR.getNamePR().toUpperCase(),currentPR.getConnection());
 		
@@ -154,25 +142,27 @@ class Cliente {
 			command = scan.next();
 			System.out.println("//                                                  //");
 			if(!command.equals("bind")) {
-				
-				//COMANDO GETP-------------------------------------------
-				if(command.equals("getp")) { 
-					indexPart = getp(currentPR);
-					currentP = currentPR.getPartsList().get(indexPart);
-					System.out.println("//// > "+ currentP.getName().toUpperCase());
 
+				if(command.equals("getp")) { 
+					if(currentPR.getPartsList().size()!=0){
+						indexPart = getp(currentPR);
+						currentP = currentPR.getPartsList().get(indexPart);
+						System.out.println("//// > "+ currentP.getName().toUpperCase());
+					}else
+						System.out.println("Nao existe pecas nesse repositorio  ");
 				}else{
-				//-------------------------------------------------------
+
 					System.out.println("//==================================================//");
 					switcher(command, currentPR, indexPart);
 				}
 			}
 			else {
 				System.out.println("//==================================================//");
-				
-				//COMANDO BIND------------------------------------------
+
 				currentPR = selectServerPR();
-				//-------------------------------------------------------
+				if(currentPR.getPartsList().size() != 0)
+					currentP = currentPR.getPartsList().get(0);
+				else currentP = null;
 								
 				msgCurrentClient(currentPR.getNamePR().toUpperCase(),currentPR.getConnection());
 			}
@@ -214,86 +204,57 @@ class Cliente {
 				break;
 			
 			case "showp" : 
-				String auxshowp;
-				System.out.print("//// >Insira o nome da Parte a ser descrita: ");
-				auxshowp = scan.next();
-				Part auxshowp2 = null;
-				boolean print = false;
-				int num = 0;
-				
-				Iterator <Part> iterator2 = partR.getPartsList().iterator();
-				while(iterator2.hasNext()){
-					auxshowp2 = iterator2.next();
-					if(auxshowp.toUpperCase().equals(auxshowp2.getName().toUpperCase())){
-						System.out.println("//// > - " + auxshowp2.getDescribe().toUpperCase());
-						Iterator<AmountSubComponents> subiterator = auxshowp2.getComponents().iterator();
-						AmountSubComponents auxsubiterator = null;
-						if(subiterator.hasNext())
-							System.out.println("//// > - Contem as seguintes subParts: \\Nome \\Quantidade \\ Servidor");
+				if(currentP == null){
+					System.out.println("Nao existe peca corrente no momento");
+					break;
+				}
+				System.out.print("//// >A peca atual: " + currentP.getName().toUpperCase() + " possui as seguitnes caracteristicas");
+				System.out.println("//// > - " + currentP.getDescribe().toUpperCase());
+				Iterator<AmountSubComponents> subiterator = currentP.getComponents().iterator();
+				AmountSubComponents auxsubiterator = null;
+					if(subiterator.hasNext())
+						System.out.println("//// > - Contem as seguintes subParts: \\Nome \\Quantidade \\ Servidor");
 							
-						else
-							System.out.println("//// > - Nao contem nenhuma subPart ");
+					else
+						System.out.println("//// > - Nao contem nenhuma subPart ");
 
-							while(subiterator.hasNext()){
-								auxsubiterator = subiterator.next();
-								System.out.println("//// > - \\" + auxsubiterator.getSubComponent().getName().toUpperCase() + " \\ "+ auxsubiterator.getAmount()+" \\ "+auxsubiterator.getServer());
+						while(subiterator.hasNext()){
+							auxsubiterator = subiterator.next();
+							System.out.println("//// > - \\" + auxsubiterator.getSubComponent().getName().toUpperCase() + " \\ "+ auxsubiterator.getAmount()+" \\ "+auxsubiterator.getServer());
 
 							}
 
-						if(auxshowp2.getIsPrimitive())
+						if(currentP.getIsPrimitive())
 							System.out.printf("//// > - Esta chave é primitiva. \n");
 						else
 							System.out.printf("//// > - Esta chave não é primitiva. \n");
 
-						print = true;
 						break;
-					}
-				}
-				if(!print)
-					System.out.printf("//// > O nome colocado é invalido ou a Parte é inexistente. ");
 
-				break;
 			case "clearlist" : 
-				if(partR.clearParts())
-					System.out.println("//// > A lista foi limpa com sucesso. ");
-				else
-					System.out.println("//// > Não foi possivel limpar a lista. ");
-
+				if(currentP == null){
+					System.out.println("Nao existe peca corrente no momento");
+					break;
+				}
+				currentP.getComponents().clear();
+				System.out.println("//// > A lista foi limpa com sucesso. ");
 				break;
 			
 			case "addsubpart" : 
-				boolean print2 = false;
-				boolean print3 = false;
-				int partnum = 0;
-				String auxpart;
-				System.out.print("//// >Insira o nome da Parte que sera inserida uma subPart: ");
-				scan.nextLine();
-				auxpart = scan.nextLine();
-				auxpart = auxpart.replaceAll(" ", "_").toLowerCase();
-				Part auxpart2 = null;
-				
-				Iterator <Part> iterator3 = partR.getPartsList().iterator();
-				while(iterator3.hasNext()){
-					auxpart2 = iterator3.next();
-					if(auxpart.toUpperCase().equals(auxpart2.getName().toUpperCase())){
-						System.out.printf("//// > - a Parte: " + auxpart2.getName().toUpperCase() + " ");
-						if(!auxpart2.getIsPrimitive()){
-							System.out.println("nao é primitiva. ");
-							print2 = true;
-						}
-						else
-						break;
-					}else
-						
-				
-					partnum++;
+				if(currentP == null){
+					System.out.println("Nao existe peca corrente no momento");
+					break;
 				}
-				if(!print2){
-					System.out.printf("//// > - a Parte: " + auxpart + " nao existe ou e invalida \n");
+				System.out.print("//// >A peca atual: " + currentP.getName().toUpperCase());
+				if(!currentP.getIsPrimitive())
+					System.out.println(" \\ nao é primitiva. ");
+				else{
+					System.out.println(" \\ é primitiva. ");
 					break;
 				}
 				String auxsubpart;
 				System.out.print("//// >Insira o nome da subParte que sera inserida: ");
+				scan.nextLine();
 				auxsubpart = scan.nextLine();
 				auxsubpart = auxsubpart.replaceAll(" ", "_").toLowerCase();
 				System.out.print("//// >Insira a quantidade: ");
@@ -307,25 +268,15 @@ class Cliente {
 					while(iterator4.hasNext()){
 						auxsubpart2 = iterator4.next();
 						if(auxsubpart.toUpperCase().equals(auxsubpart2.getName().toUpperCase())){
-							ArrayList <Part> partaux = partR.getPartsList();
-							Part partaux2 = partaux.get(partnum-1);
-							partaux2.addSubComponents(auxsubpart2, auxsubqnt, serversNames.get(servers));
+							currentP.addSubComponents(auxsubpart2, auxsubqnt, serversNames.get(servers));
 							System.out.printf("//// > - a Parte: " + auxsubpart2.getName() + " foi adicionada com sucesso! \n");
-							print3 = true;
+
 						}
 					}
 				}
-				if(!print3){
-					System.out.printf("//// > - A subPart nao existe ou e invalida. ");
-
-				}
-				/*
-				 *	IMPLEMENTAR 
-				 */
 				
 				break;
-			
-			//COMANDO ADDP------------------------------------------------------------	
+
 			case "addp" :
 				Part part = new Servidor();
 				countParts++;
@@ -363,6 +314,7 @@ class Cliente {
 					}
 				}
 				partR.addPart(part);
+				currentP = part;
 				
 				msgSucessCreatedPart();
 			
@@ -383,7 +335,6 @@ class Cliente {
 		System.out.println("//================= Conexao Atual ==================//");
 		System.out.printf ("// Repositorio: %s\n", rep);
 		System.out.printf ("// Link: %s\n", link);
-		System.out.println("// Pecas:");
 		System.out.println("// Quantidade de Pecas:" + currentPR.getPartsList().size());
 		System.out.println("//==================================================//");
 		System.out.println("//                                                  //");

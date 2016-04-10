@@ -12,7 +12,7 @@ public class Main {
 	public static void main(String[] args) throws RemoteException, MalformedURLException {
 		
 		Servidor server = new Servidor();
-		//rebind(nome do servico a ser disponibilizado, referencia do objeto)
+		
 		String conn = "localhost/" + args[0];
 		
 		Naming.rebind(conn, server);
