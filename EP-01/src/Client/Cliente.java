@@ -147,7 +147,7 @@ class Cliente {
 					if(currentPR.getPartsList().size()!=0){
 						indexPart = getp(currentPR);
 						currentP = currentPR.getPartsList().get(indexPart);
-						System.out.println("//// > "+ currentP.getName().toUpperCase());
+						System.out.println("//// > Nova peca corrente: "+ currentP.getName().toUpperCase());
 					}else
 						System.out.println("Nao existe pecas nesse repositorio  ");
 				}else{
@@ -225,9 +225,9 @@ class Cliente {
 							}
 
 						if(currentP.getIsPrimitive())
-							System.out.printf("//// > - Esta chave é primitiva. \n");
+							System.out.printf("//// > - Esta chave Ã© primitiva. \n");
 						else
-							System.out.printf("//// > - Esta chave não é primitiva. \n");
+							System.out.printf("//// > - Esta chave nÃ£o Ã© primitiva. \n");
 
 						break;
 
@@ -247,9 +247,9 @@ class Cliente {
 				}
 				System.out.print("//// >A peca atual: " + currentP.getName().toUpperCase());
 				if(!currentP.getIsPrimitive())
-					System.out.println(" \\ nao é primitiva. ");
+					System.out.println(" \\ nao Ã© primitiva. ");
 				else{
-					System.out.println(" \\ é primitiva. ");
+					System.out.println(" \\ Ã© primitiva. ");
 					break;
 				}
 				String auxsubpart;
@@ -326,7 +326,7 @@ class Cliente {
 				break;
 			
 			default : 
-				System.out.println("Comando Invalido \\  Fernando sexisi");
+				System.out.println("Comando Invalido");
 		}
 	}
 	
