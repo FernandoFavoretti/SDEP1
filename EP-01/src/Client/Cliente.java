@@ -64,7 +64,7 @@ class Cliente {
 		System.out.println();
 		System.out.print(">Insira o nome do Servidor: ");
 		nameServer = scan.nextLine();
-		//serversNames.add(nameServer);
+		
 		runNewServer(nameServer);
 		msgSucessServer();
 	}
@@ -127,10 +127,12 @@ class Cliente {
 		String[] names = Naming.list("localhost");
 		System.out.println("");
 		System.out.println(">------------- Servidores -------------");
-		for (int i = 0; i < names.length; i++)
+		for (int i = 0; i < names.length; i++){
 			System.out.printf("> %d  - " + getNameWithBarsSplit(names[i], 4).toUpperCase() + "\n", i+1);
+			serversNames.add(getNameWithBarsSplit(names[i], 4).toUpperCase());
+		}
 		System.out.println(">--------------------------------------");
-
+		
 
 	}
 	
@@ -157,10 +159,13 @@ class Cliente {
 				if(command.equals("getp")) { 
 					indexPart = getp(currentPR);
 					currentP = currentPR.getPartsList().get(indexPart);
-				}
+					System.out.println("//// > "+ currentP.getName().toUpperCase());
+
+				}else{
 				//-------------------------------------------------------
-				System.out.println("//==================================================//");
-				switcher(command, currentPR, indexPart);
+					System.out.println("//==================================================//");
+					switcher(command, currentPR, indexPart);
+				}
 			}
 			else {
 				System.out.println("//==================================================//");
@@ -224,21 +229,21 @@ class Cliente {
 						Iterator<AmountSubComponents> subiterator = auxshowp2.getComponents().iterator();
 						AmountSubComponents auxsubiterator = null;
 						if(subiterator.hasNext())
-							System.out.println("//// > - Contem as seguintes subParts: ");
+							System.out.println("//// > - Contem as seguintes subParts: \\Nome \\Quantidade \\ Servidor");
 							
 						else
 							System.out.println("//// > - Nao contem nenhuma subPart ");
 
 							while(subiterator.hasNext()){
 								auxsubiterator = subiterator.next();
-								System.out.println("//// > - " + auxsubiterator.getSubComponent().getName() + "  "+ auxsubiterator.getAmount()+" "+auxsubiterator.getServer());
+								System.out.println("//// > - \\" + auxsubiterator.getSubComponent().getName().toUpperCase() + " \\ "+ auxsubiterator.getAmount()+" \\ "+auxsubiterator.getServer());
 
 							}
 
 						if(auxshowp2.getIsPrimitive())
-							System.out.printf("//// > - Esta chave é primitiva. ");
+							System.out.printf("//// > - Esta chave é primitiva. \n");
 						else
-							System.out.printf("//// > - Esta chave não é primitiva. ");
+							System.out.printf("//// > - Esta chave não é primitiva. \n");
 
 						print = true;
 						break;
@@ -302,7 +307,9 @@ class Cliente {
 					while(iterator4.hasNext()){
 						auxsubpart2 = iterator4.next();
 						if(auxsubpart.toUpperCase().equals(auxsubpart2.getName().toUpperCase())){
-							partR.getPartsList().get(partnum-1).addSubComponents(auxsubpart2, auxsubqnt, serversNames.get(servers));
+							ArrayList <Part> partaux = partR.getPartsList();
+							Part partaux2 = partaux.get(partnum-1);
+							partaux2.addSubComponents(auxsubpart2, auxsubqnt, serversNames.get(servers));
 							System.out.printf("//// > - a Parte: " + auxsubpart2.getName() + " foi adicionada com sucesso! \n");
 							print3 = true;
 						}
@@ -367,7 +374,7 @@ class Cliente {
 				break;
 			
 			default : 
-				System.out.println("BOBAGEM");
+				System.out.println("Comando Invalido \\  Fernando sexisi");
 		}
 	}
 	
