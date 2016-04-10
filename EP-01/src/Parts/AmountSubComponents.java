@@ -1,6 +1,8 @@
 package Parts;
 
-public class AmountSubComponents {
+import java.io.Serializable;
+
+public class AmountSubComponents implements Serializable {
 
 	public Part subComponent = null;
 	public int amount = 0;
