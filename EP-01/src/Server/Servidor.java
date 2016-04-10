@@ -86,7 +86,7 @@ public class Servidor extends UnicastRemoteObject implements Part , PartReposito
 	
 	@Override
 	public void setComponents() throws RemoteException { 
-		
+		this.componentsPart.clear();
 	}
 	
 	@Override

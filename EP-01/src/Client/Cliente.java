@@ -208,7 +208,7 @@ class Cliente {
 					System.out.println("Nao existe peca corrente no momento");
 					break;
 				}
-				System.out.print("//// >A peca atual: " + currentP.getName().toUpperCase() + " possui as seguitnes caracteristicas");
+				System.out.print("//// >A peca atual: " + currentP.getName().toUpperCase() + " possui as seguitnes caracteristicas \n");
 				System.out.println("//// > - " + currentP.getDescribe().toUpperCase());
 				Iterator<AmountSubComponents> subiterator = currentP.getComponents().iterator();
 				AmountSubComponents auxsubiterator = null;
@@ -225,9 +225,9 @@ class Cliente {
 							}
 
 						if(currentP.getIsPrimitive())
-							System.out.printf("//// > - Esta chave é primitiva. \n");
+							System.out.printf("//// > - Esta peca e primitiva. \n");
 						else
-							System.out.printf("//// > - Esta chave não é primitiva. \n");
+							System.out.printf("//// > - Esta peca nao e primitiva. \n");
 
 						break;
 
@@ -236,7 +236,7 @@ class Cliente {
 					System.out.println("Nao existe peca corrente no momento");
 					break;
 				}
-				currentP.getComponents().clear();
+				currentP.setComponents();
 				System.out.println("//// > A lista foi limpa com sucesso. ");
 				break;
 			
@@ -247,9 +247,9 @@ class Cliente {
 				}
 				System.out.print("//// >A peca atual: " + currentP.getName().toUpperCase());
 				if(!currentP.getIsPrimitive())
-					System.out.println(" \\ nao é primitiva. ");
+					System.out.println(" \\ nao e primitiva. ");
 				else{
-					System.out.println(" \\ é primitiva. ");
+					System.out.println(" \\ e primitiva. ");
 					break;
 				}
 				String auxsubpart;
@@ -261,7 +261,7 @@ class Cliente {
 				int auxsubqnt;
 				auxsubqnt = Integer.parseInt(scan.next());
 				Part auxsubpart2 = null;
-				
+				boolean control = false;
 				for(int servers = 0; servers < serversPR.size() ; servers++){
 					PartRepository auxrepo = serversPR.get(servers);
 					Iterator <Part> iterator4 = auxrepo.getPartsList().iterator();
@@ -270,11 +270,11 @@ class Cliente {
 						if(auxsubpart.toUpperCase().equals(auxsubpart2.getName().toUpperCase())){
 							currentP.addSubComponents(auxsubpart2, auxsubqnt, serversNames.get(servers));
 							System.out.printf("//// > - a Parte: " + auxsubpart2.getName() + " foi adicionada com sucesso! \n");
-
+							control=true;
 						}
 					}
 				}
-				
+				if(!control) System.out.println("Nao foi possivel inserir a subpart");
 				break;
 
 			case "addp" :
