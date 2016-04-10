@@ -200,12 +200,10 @@ class Cliente {
 			case "listp" : 
 				Iterator <Part> iterator = partR.getPartsList().iterator();
 				Part auxS = null;
-				int i = 0;
 				System.out.println("//// >------------- Lista de Parts -------------");
 				while (iterator.hasNext()) {
 					auxS = iterator.next();
-					System.out.printf("//// > %d - " + auxS.getName().toUpperCase() + "\n", i+1);
-					i++;
+					System.out.printf("//// > "+ auxS.getCod() +" - " + auxS.getName().toUpperCase() + "\n");
 				}
 				System.out.println("////>-----------------------------------------");
 				break;
@@ -233,7 +231,7 @@ class Cliente {
 
 							while(subiterator.hasNext()){
 								auxsubiterator = subiterator.next();
-								System.out.println("//// > - " + auxsubiterator.getSubComponent().getName() + " "+ auxsubiterator.getAmount()+" "+auxsubiterator.getServer());
+								System.out.println("//// > - " + auxsubiterator.getSubComponent().getName() + "  "+ auxsubiterator.getAmount()+" "+auxsubiterator.getServer());
 
 							}
 
@@ -264,7 +262,9 @@ class Cliente {
 				int partnum = 0;
 				String auxpart;
 				System.out.print("//// >Insira o nome da Parte que sera inserida uma subPart: ");
-				auxpart = scan.next();
+				scan.nextLine();
+				auxpart = scan.nextLine();
+				auxpart = auxpart.replaceAll(" ", "_").toLowerCase();
 				Part auxpart2 = null;
 				
 				Iterator <Part> iterator3 = partR.getPartsList().iterator();
@@ -289,7 +289,8 @@ class Cliente {
 				}
 				String auxsubpart;
 				System.out.print("//// >Insira o nome da subParte que sera inserida: ");
-				auxsubpart = scan.next();
+				auxsubpart = scan.nextLine();
+				auxsubpart = auxsubpart.replaceAll(" ", "_").toLowerCase();
 				System.out.print("//// >Insira a quantidade: ");
 				int auxsubqnt;
 				auxsubqnt = Integer.parseInt(scan.next());
@@ -301,8 +302,8 @@ class Cliente {
 					while(iterator4.hasNext()){
 						auxsubpart2 = iterator4.next();
 						if(auxsubpart.toUpperCase().equals(auxsubpart2.getName().toUpperCase())){
-							currentPR.getPartsList().get(partnum).addSubComponents(auxsubpart2, auxsubqnt, serversNames.get(servers));
-							System.out.printf("//// > - a Parte: " + auxsubpart2.getName() + " foi adicionada com sucesso! ");
+							partR.getPartsList().get(partnum-1).addSubComponents(auxsubpart2, auxsubqnt, serversNames.get(servers));
+							System.out.printf("//// > - a Parte: " + auxsubpart2.getName() + " foi adicionada com sucesso! \n");
 							print3 = true;
 						}
 					}
@@ -326,17 +327,34 @@ class Cliente {
 				part.setCod(countParts);
 				
 				System.out.print("//// >Insira o nome da Part: ");
-				aux = scan.next();
+				scan.nextLine();
+				aux = scan.nextLine();
+				
+
+				aux = aux.replaceAll(" ", "_").toLowerCase();
 				part.setName(aux);
 				
 				System.out.print("//// >Insira uma descricao da Part: ");
-				aux = scan.next();
+				aux = scan.nextLine();
+				
+				aux = aux.replaceAll(" ", "_").toLowerCase();
 				part.setDescribe(aux);
 				
 				System.out.print("//// >Eh primitivo? [y/n]: ");
-				aux = scan.next(); 
-				part.setIsPrimitive(aux.equals("y"));
-				
+				while(!aux.equals("y") && !aux.equals("n")){
+					aux = scan.next(); 
+					if(aux.equals("y")){
+						part.setIsPrimitive(true);
+					}
+					if(aux.equals("n")){
+						part.setIsPrimitive(false);
+
+					}
+					if(!aux.equals("y") && !aux.equals("n")){
+						System.out.println("//// > Entrada invalida. Responda com 'y' ou 'n' ");
+						
+					}
+				}
 				partR.addPart(part);
 				
 				msgSucessCreatedPart();
@@ -353,13 +371,13 @@ class Cliente {
 		}
 	}
 	
-	public static void msgCurrentClient(String rep, String link) {
+	public static void msgCurrentClient(String rep, String link) throws RemoteException {
 		System.out.println("");
 		System.out.println("//================= Conexao Atual ==================//");
 		System.out.printf ("// Repositorio: %s\n", rep);
 		System.out.printf ("// Link: %s\n", link);
 		System.out.println("// Pecas:");
-		System.out.println("// Subpecas:");
+		System.out.println("// Quantidade de Pecas:" + currentPR.getPartsList().size());
 		System.out.println("//==================================================//");
 		System.out.println("//                                                  //");
 	}
@@ -418,6 +436,8 @@ class Cliente {
 	public static void msgInstruction() {
 		System.out.println(">INSTRUCOES:");
 		System.out.println(">Crie servidores inserido seu nome.");
+		System.out.println(">Nome de servidor nao podera ser nome composto!!! ");
+
 	}
 	
 }
