@@ -6,7 +6,6 @@ import java.rmi.RemoteException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Scanner;
 
 public class Main {
 
@@ -31,7 +30,6 @@ public class Main {
 		System.out.print  ("// CREATED IN: "); System.out.println(System.getProperty("user.name"));
 		System.out.println("//                                                  //");
 		System.out.println("//==================================================//");
-		System.out.println();
-		
+	
 	}
 }

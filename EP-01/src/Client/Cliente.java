@@ -64,7 +64,7 @@ class Cliente {
 		System.out.println();
 		System.out.print(">Insira o nome do Servidor: ");
 		nameServer = scan.nextLine();
-		serversNames.add(nameServer);
+		//serversNames.add(nameServer);
 		runNewServer(nameServer);
 		msgSucessServer();
 	}
@@ -77,8 +77,25 @@ class Cliente {
 	    }
 	}
 	
-	public static void startConnection() throws MalformedURLException, RemoteException, NotBoundException {
+	public  static String getNameWithBarsSplit(String in, int index) {
+		String[] out = in.split("/");
+		return out[index];
+	}
 	
+	public static void startConnection() throws MalformedURLException, RemoteException, NotBoundException {
+		
+		String[] names = Naming.list("");
+		String auxS = null;
+		for (int i = 0; i < names.length; i++) {
+			auxS = names[i];
+			Part part = (Part) Naming.lookup(auxS);
+			PartRepository partRep = (PartRepository) Naming.lookup(auxS);
+			partRep.setNamePR(getNameWithBarsSplit(auxS, 4));
+			partRep.setConnection(getNameWithBarsSplit(auxS, 3) + "/" +getNameWithBarsSplit(auxS, 4));
+			serversPR.add(partRep);
+		}
+		
+		/*
 		Iterator <String> iterator = serversNames.iterator();
 		String auxS = null;
 		while (iterator.hasNext()) {
@@ -89,7 +106,7 @@ class Cliente {
 			partRep.setNamePR(auxS);
 			serversPR.add(partRep);
 		}
-		
+		*/
 	}
 	
 	public static String selectServerName(int index) throws MalformedURLException, RemoteException, NotBoundException {
@@ -101,22 +118,20 @@ class Cliente {
 		showAllServer();
 		System.out.print(">Selecione Servidor: ");
 		index = scan.nextInt();
+		
 		return serversPR.get(index-1);
 	}
 	
-	public static void showAllServer() {
+	public static void showAllServer() throws RemoteException, MalformedURLException {
 		
-		Iterator <String> iterator = serversNames.iterator();
-		String auxS = null;
-		int i = 0;
+		String[] names = Naming.list("localhost");
 		System.out.println("");
 		System.out.println(">------------- Servidores -------------");
-		while (iterator.hasNext()) {
-			auxS = iterator.next();
-			System.out.printf("> %d - " + auxS.toUpperCase() + "\n", i+1);
-			i++;
-		}
+		for (int i = 0; i < names.length; i++)
+			System.out.printf("> %d  - " + getNameWithBarsSplit(names[i], 4).toUpperCase() + "\n", i+1);
 		System.out.println(">--------------------------------------");
+
+
 	}
 	
 	public static void startClient() throws MalformedURLException, RemoteException, NotBoundException{
@@ -402,11 +417,7 @@ class Cliente {
 	
 	public static void msgInstruction() {
 		System.out.println(">INSTRUCOES:");
-		System.out.println(">Crie servidores inserido seu nome");
-		System.out.println(">Falta implementar os comandos:");
-		System.out.println("> - showp");
-		System.out.println("> - clearlist");
-		System.out.println("> - addsubpart");
+		System.out.println(">Crie servidores inserido seu nome.");
 	}
 	
 }
