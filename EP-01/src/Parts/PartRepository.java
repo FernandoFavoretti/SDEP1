@@ -17,9 +17,6 @@ public interface PartRepository extends Remote{
 	
 	public void setConnection(String conn) throws RemoteException;
 	public void setNamePR(String name) throws RemoteException;
-	
-
-	public String testPartRepository(String test) throws RemoteException;
 		
 
 }

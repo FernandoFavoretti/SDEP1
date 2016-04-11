@@ -19,6 +19,5 @@ public interface Part extends Remote {
 	public void setComponents() throws RemoteException;
 	public void setIsPrimitive(boolean primitive) throws RemoteException;
 	
-	public String testPart(String test) throws RemoteException;
 	
 }

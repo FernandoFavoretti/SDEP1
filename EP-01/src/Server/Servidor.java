@@ -93,12 +93,6 @@ public class Servidor extends UnicastRemoteObject implements Part , PartReposito
 	public void setIsPrimitive(boolean primitive) throws RemoteException {	
 		this.isPrimitive = primitive; 
 	}
-	
-	//teste RMI----------------------------------------------------------
-	@Override
-	public String testPart(String test) throws RemoteException {
-		return "Teste " + test + " com sucesso!";
-	}
 		
 	
 	/***************************************************************************/
@@ -169,21 +163,7 @@ public class Servidor extends UnicastRemoteObject implements Part , PartReposito
 		this.namePR = name;
 	}
 	
-	//teste RMI----------------------------------------------------------
-	@Override
-	public String testPartRepository(String test) throws RemoteException {
-		return "Teste " + test + " com sucesso!";
-	}
-	
-	
-	
-	/***************************************************************************/
-	//							Metodos de Servidor								/
-	/***************************************************************************/
-	
-	public String testServer(String test) throws RemoteException {
-		return "Teste " + test + " com sucesso!";
-	}
+
 
 }
 
