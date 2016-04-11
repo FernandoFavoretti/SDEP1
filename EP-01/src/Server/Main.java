@@ -26,8 +26,8 @@ public class Main {
 		System.out.println("//                                                  //");
 		System.out.printf ("// HOST: %s\n", conn);
 		System.out.println("// DESCRIBE: Repositorio de partes.");
-		System.out.print  ("// CREATED BY: "); System.out.println(dateFormat.format(date));
-		System.out.print  ("// CREATED IN: "); System.out.println(System.getProperty("user.name"));
+		System.out.print  ("// CREATED IN: "); System.out.println(dateFormat.format(date));
+		System.out.print  ("// CREATED BY: "); System.out.println(System.getProperty("user.name"));
 		System.out.println("//                                                  //");
 		System.out.println("//==================================================//");
 	
