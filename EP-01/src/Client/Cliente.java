@@ -147,7 +147,9 @@ class Cliente {
 					if(currentPR.getPartsList().size()!=0){
 						indexPart = getp(currentPR);
 						currentP = currentPR.getPartsList().get(indexPart);
-						System.out.println("//// > Nova peca corrente: "+ currentP.getName().toUpperCase());
+						System.out.println("//// >Nova peca corrente: "+ currentP.getName().toUpperCase());
+						System.out.println("//==================================================//");
+						System.out.println("//                                                  //");
 					}else
 						System.out.println("Nao existe pecas nesse repositorio  ");
 				}else{
@@ -174,6 +176,8 @@ class Cliente {
 	public static int getp(PartRepository partR) throws RemoteException {
 		int codPart;
 		int index = 0;
+		
+		System.out.println("//==================================================//");
 		System.out.print("//// >Insira o codigo da peca: ");
 		codPart = scan.nextInt();
 		
@@ -195,12 +199,14 @@ class Cliente {
 			case "listp" : 
 				Iterator <Part> iterator = partR.getPartsList().iterator();
 				Part auxS = null;
-				System.out.println("//// >------------- Lista de Parts -------------");
+				System.out.println("//// >------------- Lista de Parts -----------------//");
 				while (iterator.hasNext()) {
 					auxS = iterator.next();
 					System.out.printf("//// > "+ auxS.getCod() +" - " + auxS.getName().toUpperCase() + "\n");
 				}
-				System.out.println("////>-----------------------------------------");
+				System.out.println("//// >----------------------------------------------//");
+				System.out.println("//==================================================//");
+				System.out.println("//                                                  //");	
 				break;
 			
 			case "showp" : 
@@ -208,7 +214,7 @@ class Cliente {
 					System.out.println("Nao existe peca corrente no momento");
 					break;
 				}
-				System.out.print("//// >A peca atual: " + currentP.getName().toUpperCase() + " possui as seguitnes caracteristicas \n");
+				System.out.print("//// >A peca atual " + currentP.getName().toUpperCase() + " possui caracteristicas: \n");
 				System.out.println("//// > - " + currentP.getDescribe().toUpperCase());
 				Iterator<AmountSubComponents> subiterator = currentP.getComponents().iterator();
 				AmountSubComponents auxsubiterator = null;
@@ -216,7 +222,7 @@ class Cliente {
 						System.out.println("//// > - Contem as seguintes subParts: \\Nome \\Quantidade \\ Servidor");
 							
 					else
-						System.out.println("//// > - Nao contem nenhuma subPart ");
+						System.out.println("//// > - Nao contem nenhuma sub-parts ");
 
 						while(subiterator.hasNext()){
 							auxsubiterator = subiterator.next();
@@ -229,7 +235,9 @@ class Cliente {
 						else
 							System.out.printf("//// > - Esta peca nao e primitiva. \n");
 
-						break;
+					System.out.println("//==================================================//");
+					System.out.println("//                                                  //");	
+					break;
 
 			case "clearlist" : 
 				if(currentP == null){
@@ -246,10 +254,13 @@ class Cliente {
 					break;
 				}
 				System.out.print("//// >A peca atual: " + currentP.getName().toUpperCase());
-				if(!currentP.getIsPrimitive())
-					System.out.println(" \\ nao e primitiva. ");
+				if(!currentP.getIsPrimitive()) {
+					System.out.println(" nao eh primitiva. ");
+				}
 				else{
-					System.out.println(" \\ e primitiva. ");
+					System.out.println(" eh primitiva. ");
+					System.out.println("//==================================================//");
+					System.out.println("//                                                  //");	
 					break;
 				}
 				String auxsubpart;
@@ -269,12 +280,19 @@ class Cliente {
 						auxsubpart2 = iterator4.next();
 						if(auxsubpart.toUpperCase().equals(auxsubpart2.getName().toUpperCase())){
 							currentP.addSubComponents(auxsubpart2, auxsubqnt, serversNames.get(servers));
-							System.out.printf("//// > - a Parte: " + auxsubpart2.getName() + " foi adicionada com sucesso! \n");
+							System.out.println("//==================================================//");
+							System.out.println("//// >A Parte: " + auxsubpart2.getName() + " foi adicionada com sucesso!");
+							System.out.println("//==================================================//");
+							System.out.println("//                                                  //");	
 							control=true;
 						}
 					}
 				}
-				if(!control) System.out.println("Nao foi possivel inserir a subpart");
+				if(!control){
+					System.out.println("////Nao foi possivel inserir a subpart!           ////");
+					System.out.println("//==================================================//");
+					System.out.println("//                                                  //");	
+				}
 				break;
 
 			case "addp" :
@@ -326,7 +344,10 @@ class Cliente {
 				break;
 			
 			default : 
-				System.out.println("Comando Invalido");
+				System.out.println("//// >Comando Invalido");
+				System.out.println("//==================================================//");
+				System.out.println("//                                                  //");	
+		
 		}
 	}
 	
@@ -341,13 +362,13 @@ class Cliente {
 	}
 	
 	public static void msgSucessCreatedPart() {
-		System.out.println("////                                               //");
-		System.out.println("//// > --------------------------------------      //");
-		System.out.println("//// > | Part criada com sucesso!           |      //");
-		System.out.println("//// > --------------------------------------      //");
-		System.out.println("////                                               //");
-		System.out.println("//=================================================//");
-		System.out.println("//                                                 //");
+		System.out.println("////                                                //");
+		System.out.println("//// > --------------------------------------       //");
+		System.out.println("//// > | Part criada com sucesso!           |       //");
+		System.out.println("//// > --------------------------------------       //");
+		System.out.println("////                                                //");
+		System.out.println("//==================================================//");
+		System.out.println("//                                                  //");
 	}
 	
 	public static void msgSucessServer() {
